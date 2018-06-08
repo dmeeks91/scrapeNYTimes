@@ -1,4 +1,5 @@
 const express = require("express"),
+      exphbs = require("express-handlebars");
       bodyParser = require("body-parser"),
       db = require("./models"),      
       logger = require("morgan"),
@@ -8,6 +9,8 @@ const express = require("express"),
       routes = require("./controllers/api");
 
   let app = express();
+      app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+      app.set("view engine", "handlebars");
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use(bodyParser.json());
       app.use(express.static("public"));

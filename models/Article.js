@@ -7,7 +7,7 @@ const ArticleSchema = new Schema({
   },  
   link: {
     type: String,
-    required: true
+    required: true,
   },
   notes: [
     {
@@ -15,6 +15,10 @@ const ArticleSchema = new Schema({
       ref: "Note"
     }
   ],
+  saved: {
+    type: String,
+    default: "unsaved"
+  },
   summary: {
     type: String
   },

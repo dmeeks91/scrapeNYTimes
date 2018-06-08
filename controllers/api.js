@@ -1,16 +1,31 @@
-const axios = require("axios"),
-      cheerio = require("cheerio"),
-      db = require("../models"),
+const db = require("../models"),
       express = require("express"),
-      myCheerio = require("./cheerio"),
+      fn = require("./functions"),
       router = express.Router();
 
-router.get("/scrape", function(req, res) {
-// use axios to get nyTimes html
-      axios.get("https://www.nytimes.com/").then(function(response) {
-            myCheerio.scrapeArticles().then(()=>{
-                  res.send("Scrape Complete");
-            });
+router.get("/", function(req, res) {
+      res.redirect("/articles");
+});
+
+router.get("/articles", function(req, res) {
+      db.Article.find({})
+      .then(article => res.render("index", article));
+     
+});
+
+router.get("/saved", function(req, res) {
+      db.Article.find({})
+      .then(article => res.render("saved", article));
+     
+});
+
+router.get("/api/scrape", function(req, res) {
+      fn.getCount("Article").then(oldCount => {      
+            fn.scrapeArticles().then(() => {      
+                  fn.getCount("Article").then(newCount => {
+                        res.send(fn.getMessage("scrapeComplete", newCount - oldCount));  
+                  })   
+            }); 
       });
 });
     
