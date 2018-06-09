@@ -5,7 +5,7 @@ const express = require("express"),
       logger = require("morgan"),
       mongoose = require("mongoose"),
       MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines",
-      PORT = 3000,
+      PORT = process.env.PORT || 3000,
       routes = require("./controllers/api");
 
   let app = express();
