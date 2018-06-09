@@ -16,8 +16,8 @@ const ArticleSchema = new Schema({
     }
   ],
   saved: {
-    type: String,
-    default: "unsaved"
+    type: Boolean,
+    default: false
   },
   summary: {
     type: String

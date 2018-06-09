@@ -8,15 +8,22 @@ router.get("/", function(req, res) {
 });
 
 router.get("/articles", function(req, res) {
-      db.Article.find({})
-      .then(article => res.render("index", article));
-     
+      db.Article.find({saved:false})
+      .then(articles =>{
+            res.render("index", {data: articles});
+      });
 });
 
 router.get("/saved", function(req, res) {
+      db.Article.find({saved:true})
+      .then(articles =>{
+            res.render("saved", {data: articles});
+      });
+});
+
+router.get("api/saved", function(req, res) {
       db.Article.find({})
       .then(article => res.render("saved", article));
-     
 });
 
 router.get("/api/scrape", function(req, res) {
@@ -29,4 +36,9 @@ router.get("/api/scrape", function(req, res) {
       });
 });
     
+router.put("/api/save", function(req, res) {
+      db.Article.updateOne({_id: req.body.id},{$set:{saved: true}})
+      .then(article => res.json(article));
+});
+
 module.exports = router;

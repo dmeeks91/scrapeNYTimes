@@ -15,8 +15,10 @@ const myFunctions = {
         switch (type)
         {
             case "scrapeComplete":
-                    return msg = (data === 0) ? "No new articles to scrape. Try again later!" :
-                            `Successfully scraped ${data} new article${(data > 1) ? "s":" "}!`;
+                
+                return { message: (data === 0) ? "No new articles to scrape. Try again later!" :
+                        `Successfully scraped ${data} new article${(data > 1) ? "s":" "}!`,
+                         type: (data === 0) ? "error" : "success" }
         }
     },
     scrapeArticles: () => {
@@ -25,9 +27,11 @@ const myFunctions = {
             $("article.story").each(function(i, element) {
                 let thisArticle = new Article;
                 thisArticle.getDetails($(element));
-                //db.Article.create(thisArticle)
             });
         });
+    },
+    updateArticle: (id, save) => {
+        return db.Article.updateOne({_id: id},{$set:{saved: save}})
     }
 }
 

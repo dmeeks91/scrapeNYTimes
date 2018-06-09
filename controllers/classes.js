@@ -5,7 +5,7 @@ module.exports.Article = class Article {
         this.byLine = byLine || "";
         this.link = link || "";
         this.notes = notes || [];
-        this.saved = "unsaved";
+        this.saved = false//"unsaved";
         this.summary = summary || "";
         this.title = title || "";
     }
@@ -49,13 +49,12 @@ module.exports.Article = class Article {
 
         if (nonBlank != reqProperties) return;
         db.Article.findOneAndUpdate({link: this.link}, this, { upsert: true })
-        //db.Article.create(obj)
         .then(function(result) {
             //result == null if article alreay exists
             //console.log(result);
         })
         .catch(function(err) {
-            //console.log(err);
+            console.log(err);
         });
     };
 
