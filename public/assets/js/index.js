@@ -1,4 +1,13 @@
 const app = {
+  changeArticleStatus: (saved, btn) => {    
+    $.ajax({
+      method: "PUT",
+      url: "/api/article",
+      data: {id: btn.id, save: saved}
+    }).then(function(data) {
+      if (data) location.reload();
+    });
+  },
   deleteNote: (btn) => {
     $.ajax({
       method: "DELETE",
@@ -8,8 +17,7 @@ const app = {
         noteID: btn.noteid
       }
     }).then(function(data) {
-      console.log(data);
-      //$("#noteModal").modal('hide');
+      $("#noteModal").modal('hide');
     });
   },
   getHtml: (type, data) => {
@@ -42,15 +50,6 @@ const app = {
         break;
     }
     return html
-  },
-  changeArticleStatus: (saved, btn) => {    
-    $.ajax({
-      method: "PUT",
-      url: "/api/article",
-      data: {id: btn.id, save: saved}
-    }).then(function(data) {
-      if (data.ok) location.reload();
-    });
   },
   saveNote: (btn) => {
     const userNote = $("#noteText")[0].value;
