@@ -2,8 +2,6 @@
 
 This fullstack application allows users to view and leave comments on the latest headlines from the New York Times.
 
-Click [here](https://scrape-nytimes.herokuapp.com) to view the live demo.
-
 ### Packages That Made This Possible:
 
 1. express
@@ -17,3 +15,5 @@ Click [here](https://scrape-nytimes.herokuapp.com) to view the live demo.
 5. cheerio
 
 6. request
+
+Click [here](https://scrape-nytimes.herokuapp.com) to view the live demo.
