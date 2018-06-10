@@ -17,4 +17,4 @@ This fullstack application allows users to view and leave comments on the latest
 6. request
 
 
-Click [here](https://scrape-nytimes.herokuapp.com) to view the live demo.
+### Click [here](https://scrape-nytimes.herokuapp.com) to view the live demo.
