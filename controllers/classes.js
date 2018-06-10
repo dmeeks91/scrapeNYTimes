@@ -63,7 +63,8 @@ module.exports.Article = class Article {
     }
 }
 
-module.exports.Note = class Note{
+//Handling Notes is simple enough that I don't need a class
+/* module.exports.Note = class Note{
     constructor () {
         this.body = "";
         this.title = "";
@@ -72,4 +73,4 @@ module.exports.Note = class Note{
 
     }
     
-}
+} */

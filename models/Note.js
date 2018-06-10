@@ -2,8 +2,7 @@ const mongoose = require("mongoose"),
       Schema = mongoose.Schema;
 
 const NoteSchema = new Schema({
-  title: String,
-  body: String
+  text: String,
 });
 
 const Note = mongoose.model("Note", NoteSchema);

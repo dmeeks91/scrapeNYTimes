@@ -1,14 +1,78 @@
-const article = {
-  save: (btn) => {
-      $.ajax({
-        method: "PUT",
-        url: "/api/save",
-        data: {id: btn.target.id}
-      }).then(function(data) {
-        if (data.ok) location.reload();
-      });
+const app = {
+  deleteNote: (btn) => {
+    $.ajax({
+      method: "DELETE",
+      url: "/api/article/note",
+      data: {
+        articleID:  $("#btnHolder .saveNote").data("article"),
+        noteID: btn.noteid
+      }
+    }).then(function(data) {
+      console.log(data);
+      //$("#noteModal").modal('hide');
+    });
   },
-  scrape: () => {
+  getHtml: (type, data) => {
+    let html;
+    switch (type)
+    {
+      case "noNotes":
+        html = `<li class='list-group-item note'>
+            No notes have been added to this article yet
+          </li>`
+        break;
+      case "note":
+        //data = note
+        html = `<li class='list-group-item note'>
+            <div class='row align-items-center'>
+              <div class='col-sm-10'>
+                ${data.text}
+              </div>
+              <div class='col-sm-2'>
+                <button class='btn btn-danger delete-note'
+                data-noteID=${data._id}>x</button>
+              </div>
+            <div>
+          </li>`
+        break;
+      case "modalBtn":
+        //data = article id
+        html = `<button type="button" class="btn btn-success saveNote" 
+          data-article=${data}>Save Note</button>`;
+        break;
+    }
+    return html
+  },
+  changeArticleStatus: (saved, btn) => {    
+    $.ajax({
+      method: "PUT",
+      url: "/api/article",
+      data: {id: btn.id, save: saved}
+    }).then(function(data) {
+      if (data.ok) location.reload();
+    });
+  },
+  saveNote: (btn) => {
+    const userNote = $("#noteText")[0].value;
+    if (!userNote)
+    {
+      toastr["error"]("Your note can not be blank!");
+      return;
+    }
+    $.ajax({
+      method: "POST",
+      url: "/api/article/note",
+      data: {
+        articleID: btn.article,
+        noteText: userNote
+      }
+    }).then(function(data) {
+      console.log(data);
+      $("#noteModal").modal('hide');
+
+    });
+  },
+  scrapeArticles: () => {
     $.getJSON("/api/scrape").then(function(data) {     
       toastr[data.type](data.message);
       if (data.type === "success")
@@ -16,36 +80,41 @@ const article = {
         setTimeout(() => location.reload(),1500);
       } 
     });
-  }
+  },
+  showNotes: (btn) => {
+    //get notes for this article from db
+    $.get("/api/article/notes/"+ btn.data("id"))
+    .then(function(article) {      
+      let noteHtml = "";
+
+      //set Modal details
+      $("#noteTitle").text(article.title);
+      $("#noteText")[0].value = "";
+      
+      article.notes.forEach(note => {
+        //loop through all notes for article and create li 
+        noteHtml += app.getHtml("note", note);
+      });
+
+      //msg if no notes for article in db
+      if (noteHtml === "") noteHtml = app.getHtml("noNotes");
+
+      $("#noteHolder").html(noteHtml);
+
+      //add save btn for current note
+      $("#btnHolder").html(app.getHtml("modalBtn", article._id))
+    });
+  },
 }
 
 $(document).ready(function() {
-    $(document).on("click", ".btn.save", (e) => article.save(e));
-    $(document).on("click", ".scrape-new", () => article.scrape());
+    $(document).on("click", ".btn.save", (e) => app.changeArticleStatus(true,e.target));
+    $(document).on("click", ".btn.btn-delete", (e) => app.changeArticleStatus(false,$(e.target)[0].dataset));
+    $(document).on("click", ".scrape-new", () => app.scrapeArticles());
+    $(document).on("click", ".btn.saveNote", (e) => app.saveNote(e.currentTarget.dataset));
+    $(document).on("click", ".btn.delete-note", (e) => app.deleteNote(e.currentTarget.dataset));
+    $('#noteModal').on('show.bs.modal', (e) => app.showNotes($(e.relatedTarget)));
 
-    function renderEmpty() {
-      // This function renders some HTML to the page explaining we don't have any articles to view
-      // Using a joined array of HTML string data because it's easier to read/change than a concatenated string
-      var emptyAlert = $(
-        [
-          "<div class='alert alert-warning text-center'>",
-          "<h4>Uh Oh. Looks like we don't have any new articles.</h4>",
-          "</div>",
-          "<div class='panel panel-default'>",
-          "<div class='panel-heading text-center'>",
-          "<h3>What Would You Like To Do?</h3>",
-          "</div>",
-          "<div class='panel-body text-center'>",
-          "<h4><a class='scrape-new'>Try Scraping New Articles</a></h4>",
-          "<h4><a href='/saved'>Go to Saved Articles</a></h4>",
-          "</div>",
-          "</div>"
-        ].join("")
-      );
-      // Appending this data to the page
-      articleContainer.append(emptyAlert);
-    }
-  
     toastr.options = {
       "closeButton": true,
       "debug": false,

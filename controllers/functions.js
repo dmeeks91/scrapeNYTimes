@@ -2,8 +2,7 @@ const axios = require("axios"),
       cheerio = require("cheerio"),
       classes = require("./classes"),
       db = require("../models"),
-      Article = classes.Article,
-      Note = classes.Note; 
+      Article = classes.Article;
 
 const myFunctions = {
     getCount: type => {

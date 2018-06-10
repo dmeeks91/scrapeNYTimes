@@ -88,9 +88,31 @@ html {
     color: white;
   }
   
+  .btn-delete {
+    border: 1px solid black;
+    box-shadow: 3px 2px 3px #212529b0;
+    border: .5px solid #ced4da6b;
+    color: white !important;
+    background-color: red;
+  }
+
+  .btn-notes {
+    border: 1px solid black;
+    box-shadow: 3px 2px 3px #212529b0;
+    border: .5px solid #262b3052;
+    color: white !important;
+    background-color: #a170f3f5;
+  } 
   .article-link {
     font-family: "Cormorant SC";
     width: 100% !important;
+  }
+
+  .title,
+  .list-group-item.note
+  {
+    text-align: center;
+    width: 100%;
   }
   
   .card-header.row {
@@ -116,6 +138,12 @@ html {
     width: 80%;
   }
   
+  .modal-header {
+      font-family: "Cormorant SC";
+      background-color: #007bff;
+      color: white;
+  }
+
   .footer > .container > p {
     position: absolute;
     right: 0;
@@ -156,17 +184,8 @@ html {
     padding: 10px;
     resize: none;
   }
-  
-  .bootbox-body .btn {
-    float: right;
-    margin: 5px;
-  }
-  
-  .note.list-group-item {
-    padding: 30px;
-  }
-  
-  .note.list-group-item .btn {
+
+  /* .note.list-group-item .btn {
     position: relative;
     bottom: 10px;
-  }
+  } */
